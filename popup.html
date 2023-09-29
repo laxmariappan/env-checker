@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Env Checker Settings</title>
+</head>
+<body>
+  <h1>Env Checker Settings</h1>
+
+  <ul>
+    <li><input type="checkbox" id="disable-floating-div"> Disable floating div on this site?</a></li>
+  </ul>
+
+  <button type="button" id="save-settings">Save settings</button>
+
+  <script>
+    // Get the list of sites where the floating div is disabled.
+    var disabledSites = chrome.storage.local.get("disabledSites");
+    // Get the current tab URL.
+    var tabURL = chrome.tabs.query({ currentWindow: true, active: true })[0].url;
+
+    // Set the initial state of the checkboxes.
+    document.getElementById("disable-floating-div").checked = disabledSites && disabledSites.includes(tabURL);
+
+    // Save the settings when the user clicks the save button.
+    document.getElementById("save-settings").addEventListener("click", function() {
+      var newDisabledSites = [];
+
+      if (document.getElementById("disable-floating-div").checked) {
+        newDisabledSites.push(tabURL);
+      }
+
+      chrome.storage.local.set({ disabledSites: newDisabledSites });
+    });
+  </script>
+</body>
+</html>
